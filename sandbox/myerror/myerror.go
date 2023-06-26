@@ -19,14 +19,8 @@ func NewMyError(code int, msg string, childErr error) *MyError {
 	}
 }
 
-var Err101Error = NewMyError(101, "my error", nil)
-
-func raise101Error() error {
-	return Err101Error
-}
-
 func (e *MyError) Error() string {
-	return fmt.Sprintf("[%d] %s", e.Code, e.Message)
+	return fmt.Sprintf("[%d] %s: %s", e.Code, e.Message, e.childErr)
 }
 
 func (e *MyError) Is(target error) bool {
@@ -38,6 +32,12 @@ func (e *MyError) Is(target error) bool {
 
 func (e *MyError) Unwrap() error { // ★ errors.Unwrap()に関係するメソッド（後述）
 	return e.childErr
+}
+
+var Err101Error = NewMyError(101, "my error", nil)
+
+func raise101Error() error {
+	return Err101Error
 }
 
 func ErrorHandling1() {
@@ -95,17 +95,17 @@ func ErrorHandling2() {
 func ErrorHandling3() {
 	fmt.Println("=== ErrorHandling3 errors.Joinの使い方")
 
-	joinedErr := errors.Join(Err101Error, OtherPackageErr)
+	joinedErr := errors.Join(NewMyError(202, "my error having child error", OtherPackageErr), OtherPackageErr)
 	if errors.Is(joinedErr, OtherPackageErr) {
 		fmt.Printf("OtherPackageErrを拾える: %v \n", OtherPackageErr)
 	}
-	fmt.Printf("Joinしたエラーを出力するとこうなる(最初の要素のmsgしか出力されない): %v \n", joinedErr)
+	fmt.Printf("Joinしたエラーを出力するとこうなる(複数エラーが改行して出力される) %v \n", joinedErr)
 
 	joinedErr2 := fmt.Errorf("ここにメッセージを入れてJoinもできる: %w: %w \n", Err101Error, OtherPackageErr)
 	if errors.Is(joinedErr2, OtherPackageErr) {
 		fmt.Printf("ErrorfでもJoinと一緒: %v \n", OtherPackageErr)
 	}
-	fmt.Printf("ErrorfしてJoinしたエラーを出力するとこうなる(複数のエラーのmsgを出力できる): %v \n", joinedErr2)
+	fmt.Printf("ErrorfしてJoinしたエラーを出力するとこうなる(msgに入った値が出力される) %v \n", joinedErr2)
 
 	myError := &MyError{}
 	if ok := errors.As(joinedErr2, &myError); ok {
