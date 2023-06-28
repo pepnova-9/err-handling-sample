@@ -4,8 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/pepnova-9/err-handling-sample/domain"
-	"github.com/pepnova-9/err-handling-sample/repository"
+	"github.com/pepnova-9/err-handling-sample/sample1/repository"
+
+	domain2 "github.com/pepnova-9/err-handling-sample/sample1/domain"
 )
 
 type GetUserOutput struct {
@@ -22,7 +23,7 @@ func GetUserUsecase(ctx context.Context, userID string) (GetUserOutput, error) {
 	user, err := repository.GetUser(ctx, userID)
 	if err != nil {
 		switch err {
-		case domain.ErrRecordNotFound:
+		case domain2.ErrRecordNotFound:
 			return GetUserOutput{}, ErrUserNotFound
 		default:
 			return GetUserOutput{}, fmt.Errorf("failed to repository.GetUser: %w, %w", ErrUnexpectedError, err)
@@ -45,7 +46,7 @@ type CreateUserOutput struct {
 
 func CreateUserUsecase(ctx context.Context, input CreateUserInput) (CreateUserOutput, error) {
 
-	user, err := domain.NewUser(input.Name)
+	user, err := domain2.NewUser(input.Name)
 	if err != nil {
 		return CreateUserOutput{}, fmt.Errorf("domain.NewUser: %w", err)
 	}

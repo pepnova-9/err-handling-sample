@@ -3,8 +3,9 @@ package main
 import (
 	"net/http"
 
+	"github.com/pepnova-9/err-handling-sample/sample1/controller"
+
 	"github.com/gorilla/mux"
-	"github.com/pepnova-9/err-handling-sample/controller"
 )
 
 func Router() *mux.Router {

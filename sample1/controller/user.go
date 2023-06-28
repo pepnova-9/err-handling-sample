@@ -6,14 +6,15 @@ import (
 	"errors"
 	"net/http"
 
+	usecase2 "github.com/pepnova-9/err-handling-sample/sample1/usecase"
+
 	"github.com/gorilla/mux"
-	"github.com/pepnova-9/err-handling-sample/usecase"
 )
 
 func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	user, err := usecase.GetUserUsecase(r.Context(), vars["userID"])
+	user, err := usecase2.GetUserUsecase(r.Context(), vars["userID"])
 	if err != nil {
 		if errors.Is(r.Context().Err(), context.Canceled) {
 			w.WriteHeader(499)
@@ -21,13 +22,13 @@ func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		switch {
-		case errors.Is(err, usecase.ErrUnauthorized):
+		case errors.Is(err, usecase2.ErrUnauthorized):
 			w.WriteHeader(http.StatusUnauthorized)
 			return
-		case errors.Is(err, usecase.ErrUserNotFound):
+		case errors.Is(err, usecase2.ErrUserNotFound):
 			w.WriteHeader(http.StatusNotFound)
 			return
-		case errors.Is(err, usecase.ErrUnexpectedError):
+		case errors.Is(err, usecase2.ErrUnexpectedError):
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte("unexpected error handling"))
 			return
@@ -57,7 +58,7 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := usecase.CreateUserUsecase(r.Context(), usecase.CreateUserInput{Name: requestBody.Name})
+	user, err := usecase2.CreateUserUsecase(r.Context(), usecase2.CreateUserInput{Name: requestBody.Name})
 	if err != nil {
 		if errors.Is(r.Context().Err(), context.Canceled) {
 			w.WriteHeader(499)
@@ -65,13 +66,13 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		switch {
-		case errors.Is(err, usecase.ErrUnauthorized):
+		case errors.Is(err, usecase2.ErrUnauthorized):
 			w.WriteHeader(http.StatusUnauthorized)
 			return
-		case errors.Is(err, usecase.ErrUserNotFound):
+		case errors.Is(err, usecase2.ErrUserNotFound):
 			w.WriteHeader(http.StatusNotFound)
 			return
-		case errors.Is(err, usecase.ErrUnexpectedError):
+		case errors.Is(err, usecase2.ErrUnexpectedError):
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte("unexpected error handling"))
 			return

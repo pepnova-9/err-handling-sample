@@ -8,7 +8,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/pepnova-9/err-handling-sample/controller"
+	"github.com/pepnova-9/err-handling-sample/sample1/controller"
 )
 
 func TestGetUserEndpoint_OK(t *testing.T) {
