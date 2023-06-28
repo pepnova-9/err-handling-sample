@@ -5,10 +5,10 @@ import (
 	"errors"
 	"fmt"
 
-	domain2 "github.com/pepnova-9/err-handling-sample/sample1/domain"
+	"github.com/pepnova-9/err-handling-sample/domain"
 )
 
-func GetUser(ctx context.Context, userID string) (domain2.User, error) {
+func GetUser(ctx context.Context, userID string) (domain.User, error) {
 
 	// SQL作ってDBからUserを取得する処理
 	// user, err := db...
@@ -27,13 +27,13 @@ func GetUser(ctx context.Context, userID string) (domain2.User, error) {
 	if err != nil {
 		switch err {
 		case ORMErrRecordNotFound:
-			return domain2.User{}, domain2.ErrRecordNotFound
+			return domain.User{}, domain.ErrRecordNotFound
 		default:
-			return domain2.User{}, fmt.Errorf("failed to get user from db: %w", err)
+			return domain.User{}, fmt.Errorf("failed to get user from db: %w", err)
 		}
 	}
 
-	user := domain2.User{
+	user := domain.User{
 		ID: userID,
 	}
 

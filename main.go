@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/pepnova-9/err-handling-sample/sample1/controller"
+	"github.com/pepnova-9/err-handling-sample/controller"
 
 	"github.com/gorilla/mux"
 )
