@@ -2,6 +2,8 @@ module github.com/pepnova-9/err-handling-sample
 
 go 1.20
 
+require github.com/google/uuid v1.3.0
+
 require (
 	github.com/cockroachdb/errors v1.10.0 // indirect
 	github.com/cockroachdb/logtags v0.0.0-20230118201751-21c54148d20b // indirect

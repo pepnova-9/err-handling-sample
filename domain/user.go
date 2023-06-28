@@ -25,11 +25,11 @@ type User struct {
 }
 
 func NewUser(name string) (User, error) {
-	if len(name) > 4 {
+	if !isValidUserNameLength(name) {
 		return User{}, ErrInvalidUserNameLength
 	}
 
-	if !isAlphanumericDashUnderscore(name) {
+	if !isAlphabetOnly(name) {
 		return User{}, ErrInvalidUserNameCharacter
 	}
 
@@ -39,8 +39,25 @@ func NewUser(name string) (User, error) {
 	}, nil
 }
 
+func (u *User) ChangeName(name string) error {
+	if !isValidUserNameLength(name) {
+		return ErrInvalidUserNameLength
+	}
+
+	if !isAlphabetOnly(name) {
+		return ErrInvalidUserNameCharacter
+	}
+
+	u.Name = name
+	return nil
+}
+
 var alphabetRegexp = regexp.MustCompile(`^[a-zA-Z]+$`)
 
-func isAlphanumericDashUnderscore(s string) bool {
-	return alphabetRegexp.MatchString(s)
+func isAlphabetOnly(name string) bool {
+	return alphabetRegexp.MatchString(name)
+}
+
+func isValidUserNameLength(name string) bool {
+	return len(name) <= 4
 }

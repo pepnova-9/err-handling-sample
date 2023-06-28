@@ -10,8 +10,8 @@ import (
 
 func Router() *mux.Router {
 	r := mux.NewRouter()
-	r.HandleFunc("/users/{userID}", controller.GetUserHandler).Methods(http.MethodGet)
-	r.HandleFunc("/users", controller.CreateUserHandler).Methods(http.MethodPut)
+	sample1 := controller.Sample1{}
+	r.HandleFunc("/sample1/users/{userID}", sample1.UpdateUserHandler).Methods(http.MethodPut)
 	r.Use(requestContextCheckMiddleware)
 	return r
 }
