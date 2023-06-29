@@ -3,16 +3,15 @@ package usecase
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"github.com/pepnova-9/err-handling-sample/domain"
 	"github.com/pepnova-9/err-handling-sample/repository"
 )
 
-type Sample1 struct{}
+type Sample3 struct{}
 
-func (s *Sample1) UpdateUserUsecase(ctx context.Context, input UpdateUserInput) (UpdateUserOutput, error) {
-	sampleRepo := repository.Sample1{}
+func (s *Sample3) UpdateUserUsecase(ctx context.Context, input UpdateUserInput) (UpdateUserOutput, error) {
+	sampleRepo := repository.Sample3{}
 
 	// 権限エラーの場合
 	if input.UserID == "unauthorized" {
@@ -25,13 +24,13 @@ func (s *Sample1) UpdateUserUsecase(ctx context.Context, input UpdateUserInput) 
 		case errors.Is(err, domain.ErrRecordNotFound):
 			return UpdateUserOutput{}, ErrUserNotFound
 		default:
-			return UpdateUserOutput{}, fmt.Errorf("failed to repository.GetUser: %w: %w", ErrUnexpectedError, err)
+			return UpdateUserOutput{}, err
 		}
 	}
 
 	err = user.ChangeName(input.Name)
 	if err != nil {
-		return UpdateUserOutput{}, fmt.Errorf("failed to User.ChangeName: %w", err)
+		return UpdateUserOutput{}, err
 	}
 
 	// DBへ更新

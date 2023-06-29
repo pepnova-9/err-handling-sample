@@ -1,4 +1,4 @@
-package main
+package middleware
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func requestContextCheckMiddleware(next http.Handler) http.Handler {
+func CheckRequestContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		next.ServeHTTP(w, r)

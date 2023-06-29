@@ -2,15 +2,16 @@ package repository
 
 import (
 	"context"
-	"fmt"
+
+	"github.com/pkg/errors"
 
 	"github.com/pepnova-9/err-handling-sample/domain"
 	"github.com/pepnova-9/err-handling-sample/pkg/orm"
 )
 
-type Sample1 struct{}
+type Sample2 struct{}
 
-func (s *Sample1) GetUser(ctx context.Context, userID string) (domain.User, error) {
+func (s *Sample2) GetUser(ctx context.Context, userID string) (domain.User, error) {
 	// ===== SQL作ってDBからUserを取得する処理
 	// user, err := db...
 	// わざとエラー出すためにここでuserIDの値によってエラー変えてます
@@ -30,10 +31,9 @@ func (s *Sample1) GetUser(ctx context.Context, userID string) (domain.User, erro
 	if err != nil {
 		switch err {
 		case orm.ErrRecordNotFound:
-			return domain.User{}, domain.ErrRecordNotFound
+			return domain.User{}, errors.Wrapf(domain.ErrRecordNotFound, "no record found userID=%s", userID)
 		default:
-			// 外部ライブラリのerrorは内部エラーでラップする
-			return domain.User{}, fmt.Errorf("failed to get user from db: %w", err)
+			return domain.User{}, errors.Wrap(err, "failed to get user from db:")
 		}
 	}
 

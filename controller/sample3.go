@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -12,10 +11,10 @@ import (
 	"github.com/pepnova-9/err-handling-sample/usecase"
 )
 
-type Sample1 struct{}
+type Sample3 struct{}
 
-func (s *Sample1) UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
-	sampleUsecase := &usecase.Sample1{}
+func (s *Sample3) UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
+	sampleUsecase := &usecase.Sample3{}
 
 	vars := mux.Vars(r)
 	userID := vars["userID"]
@@ -42,8 +41,10 @@ func (s *Sample1) UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		w.WriteHeader(http.StatusInternalServerError)
-		// 500エラーの時はログにエラーを出力する
-		log.Printf("%v", fmt.Errorf("failed to UpdateUserUsecase: %w", err))
+		// 500エラーの時はスタックつきログにエラーを出力する
+		// このerrがpkg/errors.withStack出ないとスタックトレースが吐けない。 他のerrorでラップしてしまうとただmsgだけしか出ない。
+		// errをループ回してpkg/errors.withStackがあればスタックトレースを出力する関数を作って対応することもできる。 (sentryの実装はそんな感じ。)
+		log.Printf("%+v", err)
 		return
 	}
 

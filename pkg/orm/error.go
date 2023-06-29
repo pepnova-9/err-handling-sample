@@ -4,6 +4,6 @@ import "errors"
 
 // ORMが定義しているerrorとしてここで書いてます
 var (
-	ErrRecordNotFound = errors.New("record not found")
-	ErrUnknownError   = errors.New("unknown error")
+	ErrRecordNotFound = errors.New("db record not found error")
+	ErrUnknownError   = errors.New("db unknown error")
 )

@@ -26,10 +26,12 @@ type User struct {
 
 func NewUser(name string) (User, error) {
 	if !isValidUserNameLength(name) {
+		// Sample2の時はここでもpkg/errors.Wrapして返すようにする
 		return User{}, ErrInvalidUserNameLength
 	}
 
 	if !isAlphabetOnly(name) {
+		// Sample2の時はここでもpkg/errors.Wrapして返すようにする
 		return User{}, ErrInvalidUserNameCharacter
 	}
 
@@ -41,10 +43,12 @@ func NewUser(name string) (User, error) {
 
 func (u *User) ChangeName(name string) error {
 	if !isValidUserNameLength(name) {
+		// Sample2の時はここでもpkg/errors.Wrapして返すようにする
 		return ErrInvalidUserNameLength
 	}
 
 	if !isAlphabetOnly(name) {
+		// Sample2の時はここでもpkg/errors.Wrapして返すようにする
 		return ErrInvalidUserNameCharacter
 	}
 
