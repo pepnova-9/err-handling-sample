@@ -25,6 +25,8 @@ type User struct {
 }
 
 func NewUser(name string) (User, error) {
+	// Sample4ではここでdefer errwrapper.Wrapする
+
 	if !isValidUserNameLength(name) {
 		// Sample2の時はここでもpkg/errors.Wrapして返すようにする
 		return User{}, ErrInvalidUserNameLength
@@ -42,6 +44,8 @@ func NewUser(name string) (User, error) {
 }
 
 func (u *User) ChangeName(name string) error {
+	// Sample4ではここでdefer errwrapper.Wrapする
+
 	if !isValidUserNameLength(name) {
 		// Sample2の時はここでもpkg/errors.Wrapして返すようにする
 		return ErrInvalidUserNameLength

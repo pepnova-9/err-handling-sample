@@ -24,7 +24,9 @@ func (s *Sample2) UpdateUserUsecase(ctx context.Context, input UpdateUserInput) 
 	if err != nil {
 		switch {
 		case errors.Is(err, domain.ErrRecordNotFound):
-			// "failed to repository.GetUser:" と入れるか・・・？けど"DB"のエラーではなく、レコードがないことをerrorとしてハンドリングしているだけなので違和感ある。"not found"とかだと重複するし。空文字もありか？
+			// "failed to repository.GetUser:" と入れるか・・・？
+			// "not found"とかだと重複する。空文字もありか？
+			// そもそも"DB"の"エラー"ではなく、レコードがないことをerrorとしてハンドリングしているだけなのでラップするのは違和感がある。
 			return UpdateUserOutput{}, pkgErrors.Wrap(ErrUserNotFound, "")
 		default:
 			// Joinしちゃうと+v出力の時に下位のerrorのスタックトレースが取れなくなるので注意。 Joinの第一引数をerrors.withStackにしないとダメかも。

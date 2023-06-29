@@ -39,6 +39,17 @@ func Router() *mux.Router {
 	sample3 := controller.Sample3{}
 	r.HandleFunc("/sample3/users/{userID}", sample3.UpdateUserHandler).Methods(http.MethodPut)
 
+	// Sample4
+	// 外部スタック付きerrorsパッケージを使わないが、各レイヤでのエラーラップを工夫した方法
+	// メリット:
+	// - 実装がシンプル。とりあえずcontroller以降のerrorを返す関数/メソッドでdefer errwrapper.Wrapすればいい。
+	// - pkgsiteをみているとスタックトレースを付与した関数も用意されているので、それを使えばスタックトレースも吐ける。
+	// デメリット:
+	// - 名前付き返り値にする必要がある
+	// https://youtu.be/IKoSsJFdRtI?t=875
+	sample4 := controller.Sample4{}
+	r.HandleFunc("/sample4/users/{userID}", sample4.UpdateUserHandler).Methods(http.MethodPut)
+
 	r.Use(middleware.RecoverPanic, middleware.CheckRequestContext)
 	return r
 }

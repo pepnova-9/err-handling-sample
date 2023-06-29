@@ -2,20 +2,23 @@ package repository
 
 import (
 	"context"
+	"fmt"
 
-	"github.com/pkg/errors"
+	"github.com/pepnova-9/err-handling-sample/errwrapper"
 
 	"github.com/pepnova-9/err-handling-sample/domain"
 	"github.com/pepnova-9/err-handling-sample/pkg/orm"
 )
 
-type Sample2 struct{}
+type Sample4 struct{}
 
-func (s *Sample2) GetUser(ctx context.Context, userID string) (domain.User, error) {
+func (s *Sample4) GetUser(ctx context.Context, userID string) (_ domain.User, err error) {
+	//defer errwrapper.Wrap(&err, "Sample4.GetUser(%q)", userID)
+	defer errwrapper.WrapStack(&err, "Sample4.GetUser(%q)", userID)
+
 	// ===== SQL作ってDBからUserを取得する処理
 	// user, err := db...
 	// わざとエラー出すためにここでuserIDの値によってエラー変えてます
-	var err error
 	switch userID {
 	case "not_found":
 		err = orm.ErrRecordNotFound
@@ -31,11 +34,9 @@ func (s *Sample2) GetUser(ctx context.Context, userID string) (domain.User, erro
 	if err != nil {
 		switch err {
 		case orm.ErrRecordNotFound:
-			// 既に独自定義したエラーをさらにラップするのは違和感がある。
-			// 独自でエラー定義して返しているのは上位レイヤで必ずハンドリングされる(できる)ものなわけだからラップする必要はない気がする。
-			return domain.User{}, errors.Wrapf(domain.ErrRecordNotFound, "no record found userID=%s", userID)
+			return domain.User{}, domain.ErrRecordNotFound
 		default:
-			return domain.User{}, errors.Wrap(err, "failed to get user from db:")
+			return domain.User{}, fmt.Errorf("failed to get user from db: %w", err)
 		}
 	}
 
