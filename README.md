@@ -1,13 +1,12 @@
-
-- アプリケーションでのハンドリングのしやすさ
-    - ErrNoRowsのようにエラーの意味がわかる
-    - -> 独自エラーを適切に定義
-- 運用者のハンドリングのしやすさ
-    - どこで、どういう経路でエラーが発生したのかがわかる
-    - errorをラップしてmsgを付与。またはスタック付きerrorがある外部ライブラリを使う
-    - 引数の値 (個人情報のマスクが必要)
-- クライアントのハンドリングのしやすさ
-    - 4xxや5xx
-    - リトライすれば解決するのか、クライアント/サーバーどちらにエラー原因があるのか
-        - -> 独自エラーを適切にハンドリング、APIのcontrollerでHTTP Responseに変換
-    - エンドユーザーが次に何をしたらいいかわかるメッセージを表示する
+- Ease of handling in the application
+    - Errors have clear meanings, like ErrNoRows
+    - -> Properly define custom errors
+- Ease of handling for operators
+    - Understand where and how the error occurred
+    - Wrap the error and add a message, or use an external library that provides stack-trace errors
+    - Values of arguments (personal information needs to be masked)
+- Ease of handling for clients
+    - 4xx and 5xx errors
+    - Determine if retrying will resolve the issue, and whether the error is on the client or server side
+        - -> Properly handle custom errors and convert them to HTTP responses in the API controller
+    - Display messages that inform end users about what to do next
